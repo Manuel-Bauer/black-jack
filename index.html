@@ -9,6 +9,45 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
   <body>
+    <header>
+      <h2>Black Jack</h2>
+    </header>
+    <h2 id="message">It's your turn</h3>
+    <div id="gameplay">
+    <div id="player">
+      <div id="player-cards">
+        <h2>Player</h2>
+        <img src="Deck\faceddown.PNG" alt="player-card" />
+        <img src="Deck\faceddown.PNG" alt="player-card" />
+        <div>
+          <p>Score: <span id="player-score">0</span></p>
+        </div>
+        <div id="buttons">
+          <button id="hit">Hit</button>
+          <button id="stand">Stand</button>
+          <button id="new-game">New Game</button>
+        </div>
+        <div>
+          <p>Total Score: <span id="player-score">0</span></p>
+        </div>
+
+      </div>
+    </div>
+    <div id="dealer">
+      <div id="dealer-cards">
+        <h2>Dealer</h2>
+        <img src="Deck\faceddown.PNG" alt="dealer-card" />
+        <img src="Deck\faceddown.PNG" alt="dealer-card" />
+        <div>
+          <p>Score: <span id="dealer-score">0</span></p>
+        </div>
+        <div>
+          <p>Total Score: <span id="dealer-score">0</span></p>
+        </div>
+      </div>
+    </div>
+  </div> 
+
     <script src="app.js"></script>
   </body>
 </html>

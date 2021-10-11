@@ -1,0 +1,14 @@
+body {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+header {
+  text-align: center;
+  background-color: #cccccc;
+  padding: 2px;
+}
+
+img {
+  max-height: 80px;
+  max-width: 80px;
+}
