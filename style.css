@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
@@ -9,6 +13,31 @@ header {
 }
 
 img {
-  max-height: 80px;
-  max-width: 80px;
+  max-height: 70px;
+  max-width: 70px;
+}
+
+#message {
+  text-align: center;
+}
+
+#user {
+  border: solid 1px black;
+  text-align: center;
+  width: 50%;
+  float: left;
+  margin-bottom: 50px;
+}
+
+#dealer {
+  border: solid 1px black;
+  text-align: center;
+  width: 50%;
+  float: right;
+  margin-bottom: 50px;
+}
+
+#buttons {
+  text-align: center;
+  padding-top: 100px;
 }

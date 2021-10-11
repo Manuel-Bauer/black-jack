@@ -14,40 +14,57 @@
     </header>
     <h2 id="message">It's your turn</h3>
     <div id="gameplay">
-    <div id="player">
+    <div class="player" id="user">
+      <h2>Player</h2>
       <div id="player-cards">
-        <h2>Player</h2>
-        <img src="Deck\faceddown.PNG" alt="player-card" />
-        <img src="Deck\faceddown.PNG" alt="player-card" />
+        <img src="Deck\faceddown.PNG" alt="dealer-card" />
+        <img src="Deck\faceddown.PNG" alt="dealer-card" />
+        <img src="Deck\faceddown.PNG" alt="dealer-card" />
+        <img src="Deck\faceddown.PNG" alt="dealer-card" />
+        <img src="Deck\faceddown.PNG" alt="dealer-card" />
+        <img src="Deck\faceddown.PNG" alt="dealer-card" />
+        <img src="Deck\faceddown.PNG" alt="dealer-card" />
+        <img src="Deck\faceddown.PNG" alt="dealer-card" />
+        <img src="Deck\faceddown.PNG" alt="dealer-card" />
+        <img src="Deck\faceddown.PNG" alt="dealer-card" />
+        <img src="Deck\faceddown.PNG" alt="dealer-card" />
+      </div>
         <div>
-          <p>Score: <span id="player-score">0</span></p>
-        </div>
-        <div id="buttons">
-          <button id="hit">Hit</button>
-          <button id="stand">Stand</button>
-          <button id="new-game">New Game</button>
+          <p>Hand value <span id="player-score">0</span></p>
         </div>
         <div>
           <p>Total Score: <span id="player-score">0</span></p>
         </div>
-
       </div>
     </div>
-    <div id="dealer">
-      <div id="dealer-cards">
+    <div class="player" id="dealer">
         <h2>Dealer</h2>
-        <img src="Deck\faceddown.PNG" alt="dealer-card" />
-        <img src="Deck\faceddown.PNG" alt="dealer-card" />
+        <div id="dealer-cards">
+          <img src="Deck\faceddown.PNG" alt="dealer-card" />
+          <img src="Deck\faceddown.PNG" alt="dealer-card" />
+          <img src="Deck\faceddown.PNG" alt="dealer-card" />
+          <img src="Deck\faceddown.PNG" alt="dealer-card" />
+          <img src="Deck\faceddown.PNG" alt="dealer-card" />
+          <img src="Deck\faceddown.PNG" alt="dealer-card" />
+          <img src="Deck\faceddown.PNG" alt="dealer-card" />
+          <img src="Deck\faceddown.PNG" alt="dealer-card" />
+          <img src="Deck\faceddown.PNG" alt="dealer-card" />
+          <img src="Deck\faceddown.PNG" alt="dealer-card" />
+          <img src="Deck\faceddown.PNG" alt="dealer-card" />
         <div>
-          <p>Score: <span id="dealer-score">0</span></p>
+          <p>Hand value: <span id="dealer-score">0</span></p>
         </div>
         <div>
           <p>Total Score: <span id="dealer-score">0</span></p>
         </div>
       </div>
     </div>
-  </div> 
-
+  </div>
+  <div id="buttons">
+    <button id="hit">Hit</button>
+    <button id="stand">Stand</button>
+    <button id="new-game">New Game</button>
+  </div>
     <script src="app.js"></script>
   </body>
 </html>
