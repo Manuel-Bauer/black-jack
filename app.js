@@ -96,6 +96,14 @@ const displayCard = (player, card) => {
   $(`#${player}-cards`).append(`${html}`);
 };
 
+// Function that evaluates score after each hand being dealt
+const evalScore = (hand) => {
+  return hand.reduce((acc, val) => {
+    acc += val[0].value;
+    return acc;
+  }, 0);
+};
+
 // Init function
 
 const init = () => {
@@ -122,11 +130,13 @@ const init = () => {
   // Deal first two cards to player
   player.hand.push(shuffle(cardDeck));
   player.hand.push(shuffle(cardDeck));
+  console.log(player.hand);
 
   // Display cards
   player.hand.forEach((card) => displayCard("player", card[0]));
 
-  // Evaluate player score
+  // Evaluate and display hand value for player
+  playerHandValue.text(evalScore(player.hand));
 
   // Adds First two dealer cards - one hidden, one open
 
