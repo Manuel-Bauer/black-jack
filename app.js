@@ -84,9 +84,7 @@ let dealer = {
 
 const shuffle = (deck) => {
   let max = deck.length - 1;
-  console.log(deck);
   let random = Math.floor(Math.random() * max);
-  console.log(random);
   return deck.splice(random, 1);
 };
 
@@ -121,6 +119,10 @@ const evalScore = (hand) => {
 // Init function
 
 const init = () => {
+  // Enable Hit and Stand buttons
+  standBtn.attr("disabled", false);
+  hitBtn.attr("disabled", false);
+
   // Restore card deck
   player.hand.forEach((card) => cardDeck.push(card[0]));
   dealer.hand.forEach((card) => cardDeck.push(card[0]));
@@ -173,8 +175,6 @@ const init = () => {
   // Evaluate and display hand value for player and dealer without hidden card
 };
 
-// Function that evaluates Score
-
 // Event Handler
 
 // Start a new game
@@ -196,11 +196,13 @@ hitBtn.click(() => {
     dealer.totalScore++;
     dealerScore.text(dealer.totalScore);
   }
-  console.log(player.handValue);
 });
 
 // Stand
 standBtn.click(() => {
+  standBtn.attr("disabled", true);
+  hitBtn.attr("disabled", true);
+
   message.text("Dealer's turn");
   while (dealer.handValue <= 17) {
     dealer.hand.push(shuffle(cardDeck));
@@ -210,8 +212,6 @@ standBtn.click(() => {
     dealerHandValue.text(dealer.handValue);
   }
 
-  console.log(player.handValue);
-  console.log(dealer.handValue);
   // Dealer overshoots
   if (dealer.handValue > 21) {
     message.text("You Win");
@@ -224,7 +224,7 @@ standBtn.click(() => {
   // If both have 21 it is a draw, unless one player has a black-jack and the other not
   if (dealer.handValue === 21 && player.handValue === 21) {
     if (dealer.hand.length === 2 && player.hand.length > 2) {
-      message.text("Dealer Wins");
+      message.text("Dealer Wins - Start New Game");
       message.css("color", "red");
       dealer.totalScore++;
       dealerScore.text(dealer.totalScore);
@@ -233,26 +233,26 @@ standBtn.click(() => {
       message.text("Draw");
       return;
     } else {
-      message.text("You Win");
+      message.text("You Win - Start New Game");
       message.css("color", "green");
       player.totalScore++;
       playerScore.text(player.totalScore);
       return;
     }
   } else if (dealer.handValue > player.handValue) {
-    message.text("Dealer Wins");
+    message.text("Dealer Wins - Start New Game");
     message.css("color", "red");
     dealer.totalScore++;
     dealerScore.text(dealer.totalScore);
     return;
   } else if (player.handValue > dealer.handValue) {
-    message.text("You Win");
+    message.text("You Win - Start New Game");
     message.css("color", "green");
     player.totalScore++;
     playerScore.text(player.totalScore);
     return;
   } else {
-    message.text("Draw");
+    message.text("Draw - Start New Game");
     return;
   }
 });
