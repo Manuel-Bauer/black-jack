@@ -116,9 +116,28 @@ const evalScore = (hand) => {
   return value;
 };
 
+// Function for updating scores when player won
+const playerWins = () => {
+  message.text("You Win");
+  message.css("color", "green");
+  player.totalScore++;
+  playerScore.text(player.totalScore);
+};
+
+// Function for updating scores when dealer won
+const dealerWins = () => {
+  message.text("Dealer Wins - Start New Game");
+  message.css("color", "red");
+  dealer.totalScore++;
+  dealerScore.text(dealer.totalScore);
+};
+
 // Init function
 
 const init = () => {
+  // Set message color back to black
+  message.css("color", "black");
+
   // Enable Hit and Stand buttons
   standBtn.attr("disabled", false);
   hitBtn.attr("disabled", false);
@@ -191,10 +210,7 @@ hitBtn.click(() => {
   player.handValue = evalScore(player.hand);
   playerHandValue.text(player.handValue);
   if (evalScore(player.hand) > 21) {
-    message.text("Dealer Wins");
-    message.css("color", "red");
-    dealer.totalScore++;
-    dealerScore.text(dealer.totalScore);
+    dealerWins();
   }
 });
 
@@ -214,42 +230,27 @@ standBtn.click(() => {
 
   // Dealer overshoots
   if (dealer.handValue > 21) {
-    message.text("You Win");
-    message.css("color", "green");
-    player.totalScore++;
-    playerScore.text(player.totalScore);
+    playerWins();
     return;
   }
 
   // If both have 21 it is a draw, unless one player has a black-jack and the other not
   if (dealer.handValue === 21 && player.handValue === 21) {
     if (dealer.hand.length === 2 && player.hand.length > 2) {
-      message.text("Dealer Wins - Start New Game");
-      message.css("color", "red");
-      dealer.totalScore++;
-      dealerScore.text(dealer.totalScore);
+      dealerWins();
       return;
     } else if (dealer.hand.length === 2 && player.hand.length === 2) {
       message.text("Draw");
       return;
     } else {
-      message.text("You Win - Start New Game");
-      message.css("color", "green");
-      player.totalScore++;
-      playerScore.text(player.totalScore);
+      playerWins();
       return;
     }
   } else if (dealer.handValue > player.handValue) {
-    message.text("Dealer Wins - Start New Game");
-    message.css("color", "red");
-    dealer.totalScore++;
-    dealerScore.text(dealer.totalScore);
+    dealerWins();
     return;
   } else if (player.handValue > dealer.handValue) {
-    message.text("You Win - Start New Game");
-    message.css("color", "green");
-    player.totalScore++;
-    playerScore.text(player.totalScore);
+    playerWins();
     return;
   } else {
     message.text("Draw - Start New Game");
