@@ -45,7 +45,7 @@ let cardDeck = [
   { name: "9_of_diamonds", value: 9, type: "number" },
   { name: "9_of_hearts", value: 9, type: "number" },
   { name: "9_of_spades", value: 9, type: "number" },
-  { name: "9_of_clubs", value: 10, type: "number" },
+  { name: "9_of_clubs", value: 9, type: "number" },
   { name: "10_of_diamonds", value: 10, type: "number" },
   { name: "10_of_hearts", value: 10, type: "number" },
   { name: "10_of_spades", value: 10, type: "number" },
@@ -84,8 +84,9 @@ let dealer = {
 
 const shuffle = (deck) => {
   let max = deck.length - 1;
-  let random = Math.floor(Math.random() * max);
   console.log(deck);
+  let random = Math.floor(Math.random() * max);
+  console.log(random);
   return deck.splice(random, 1);
 };
 
@@ -99,23 +100,20 @@ const displayCard = (player, card) => {
 // Function that evaluates score after each hand being dealt
 const evalScore = (hand) => {
   let value = hand.reduce((acc, val) => {
-    if (val[0].type === "ace" && acc > 21) acc++;
-    else acc += val[0].value;
+    acc += val[0].value;
     return acc;
   }, 0);
 
-  // const numAces = hand.reduce((acc, val) => {
-  //   if (val[0].type === "ace") {
-  //     acc++;
-  //   }
-  //   return acc;
-  // }, 0);
+  let numAces = hand.reduce((acc, val) => {
+    if (val[0].type === "ace") acc++;
+    return acc;
+  }, 0);
 
-  // if (value > 21 && numAces > 0) {
-  //   for (let i = 0; i < numAces; i++) {
-  //     while (value > 21) value -= 10;
-  //   }
-  // }
+  // Implement logic to deduct 10 for each Ace until
+  while (value > 21 && numAces > 0) {
+    value = value - 10;
+    numAces--;
+  }
 
   return value;
 };
@@ -124,14 +122,18 @@ const evalScore = (hand) => {
 
 const init = () => {
   // Restore card deck
-  player.hand.forEach((card) => cardDeck.push(card));
-  dealer.hand.forEach((card) => cardDeck.push(card));
+  player.hand.forEach((card) => cardDeck.push(card[0]));
+  dealer.hand.forEach((card) => cardDeck.push(card[0]));
+
+  // Remove cards from Player and Dealer
+  player.hand = [];
+  dealer.hand = [];
 
   // Set Hand Values to Zero
   playerHandValue.text(0);
   dealerHandValue.text(0);
 
-  // Removes Cards
+  // Removes Cards from UI
   playerCards.empty();
   dealerCards.empty();
 
@@ -140,8 +142,8 @@ const init = () => {
 
   // Pauses for 2 seconds
   setTimeout(() => {
-    message.text("Starting hands are dealt");
-  }, 2000);
+    message.text("Dealing...");
+  }, 500);
 
   // Deal first two cards to player and one card to dealer
 
@@ -152,15 +154,22 @@ const init = () => {
   // Display cards for player, evaluate and display hand value
   setTimeout(() => {
     player.hand.forEach((card) => displayCard("player", card[0]));
-    playerHandValue.text(evalScore(player.hand));
-  }, 3000);
+    player.handValue = evalScore(player.hand);
+    playerHandValue.text(player.handValue);
+  }, 1000);
 
   // Display cards for dealer - // One Card hidden still to be implemented
   setTimeout(() => {
     dealer.hand.forEach((card) => displayCard("dealer", card[0]));
-    dealerHandValue.text(evalScore(dealer.hand));
-  }, 4000);
+    dealer.handValue = evalScore(dealer.hand);
+    dealerHandValue.text(dealer.handValue);
+  }, 1500);
 
+  // Set new message
+
+  setTimeout(() => {
+    message.text("It's your turn: Hit or Stand?");
+  }, 1600);
   // Evaluate and display hand value for player and dealer without hidden card
 };
 
@@ -174,9 +183,76 @@ newGameBtn.click(() => {
   init();
 });
 
-//
+// Hit
+hitBtn.click(() => {
+  player.hand.push(shuffle(cardDeck));
+  playerCards.empty();
+  player.hand.forEach((card) => displayCard("player", card[0]));
+  player.handValue = evalScore(player.hand);
+  playerHandValue.text(player.handValue);
+  if (evalScore(player.hand) > 21) {
+    message.text("Dealer Wins");
+    message.css("color", "red");
+    dealer.totalScore++;
+    dealerScore.text(dealer.totalScore);
+  }
+  console.log(player.handValue);
+});
 
-displayCard("player", cardDeck[0]);
-displayCard("player", cardDeck[1]);
-displayCard("dealer", cardDeck[2]);
-displayCard("dealer", cardDeck[3]);
+// Stand
+standBtn.click(() => {
+  message.text("Dealer's turn");
+  while (dealer.handValue <= 17) {
+    dealer.hand.push(shuffle(cardDeck));
+    dealerCards.empty();
+    dealer.hand.forEach((card) => displayCard("dealer", card[0]));
+    dealer.handValue = evalScore(dealer.hand);
+    dealerHandValue.text(dealer.handValue);
+  }
+
+  console.log(player.handValue);
+  console.log(dealer.handValue);
+  // Dealer overshoots
+  if (dealer.handValue > 21) {
+    message.text("You Win");
+    message.css("color", "green");
+    player.totalScore++;
+    playerScore.text(player.totalScore);
+    return;
+  }
+
+  // If both have 21 it is a draw, unless one player has a black-jack and the other not
+  if (dealer.handValue === 21 && player.handValue === 21) {
+    if (dealer.hand.length === 2 && player.hand.length > 2) {
+      message.text("Dealer Wins");
+      message.css("color", "red");
+      dealer.totalScore++;
+      dealerScore.text(dealer.totalScore);
+      return;
+    } else if (dealer.hand.length === 2 && player.hand.length === 2) {
+      message.text("Draw");
+      return;
+    } else {
+      message.text("You Win");
+      message.css("color", "green");
+      player.totalScore++;
+      playerScore.text(player.totalScore);
+      return;
+    }
+  } else if (dealer.handValue > player.handValue) {
+    message.text("Dealer Wins");
+    message.css("color", "red");
+    dealer.totalScore++;
+    dealerScore.text(dealer.totalScore);
+    return;
+  } else if (player.handValue > dealer.handValue) {
+    message.text("You Win");
+    message.css("color", "green");
+    player.totalScore++;
+    playerScore.text(player.totalScore);
+    return;
+  } else {
+    message.text("Draw");
+    return;
+  }
+});
