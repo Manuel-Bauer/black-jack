@@ -1,8 +1,19 @@
+// DOM items
+
+let message = $("#message");
+let playerHandValue = $("#player-hand-value");
+let dealerHandValue = $("#dealer-hand-value");
+let playerScore = $("#player-score");
+let dealerScore = $("#dealer-score");
+let hitBtn = $("#hit");
+let standBtn = $("#stand");
+let newGameBtn = $("#new-game");
+
 // Data structure
 
 let cardDeck = [
   { name: "2_of_clubs", value: 2, type: "number" },
-  { name: "2_of_diamodns", value: 2, type: "number" },
+  { name: "2_of_diamonds", value: 2, type: "number" },
   { name: "2_of_hearts", value: 2, type: "number" },
   { name: "2_of_spades", value: 2, type: "number" },
   { name: "3_of_clubs", value: 3, type: "number" },
@@ -59,14 +70,12 @@ let player = {
   hand: [],
   handValue: 0,
   totalScore: 0,
-  turn: true,
 };
 
 let dealer = {
   hand: [],
   handValue: 0,
   totalScore: 0,
-  turn: false,
 };
 
 // Function that shuffles random card out of deck and returns it
@@ -80,7 +89,8 @@ const shuffle = (deck) => {
 // Function that displays card
 
 const display = (player, card) => {
-  let path = `img\\deck\\${card.name}`;
+  let html = `<img src=img\\deck\\${card.name}.png alt="${player}-card"/>`;
+  $(`#${player}-cards`).append(`${html}`);
 };
 
 // Init function
@@ -89,6 +99,8 @@ const init = () => {
   // Restore card deck
   player.hand.forEach((card) => cardDeck.push(card));
   dealer.hand.forEach((card) => cardDeck.push(card));
+  // Update Player values
+
   // Set Hand Values to Zero
   $("p#player-hand-value").text(0);
   $("p#dealer-hand-value").text(0);
