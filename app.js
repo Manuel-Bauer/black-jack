@@ -96,7 +96,7 @@ const displayCard = (player, card) => {
 };
 
 // Function that evaluates score after each hand being dealt
-const evalScore = (hand) => {
+const evalScore = (hand, user = "player") => {
   let value = hand.reduce((acc, val) => {
     acc += val[0].value;
     return acc;
@@ -107,14 +107,35 @@ const evalScore = (hand) => {
     return acc;
   }, 0);
 
-  // Implement logic to deduct 10 for each Ace until
-  while (value > 21 && numAces > 0) {
-    value = value - 10;
-    numAces--;
+  if (user === "player") {
+    while (value > 21 && numAces > 0) {
+      value = value - 10;
+      numAces--;
+    }
   }
 
+  if (user === "dealer") {
+    while (
+      (value >= 17 && value <= playerHandValue && numAces > 0) ||
+      (value > 21 && numAces > 0)
+    ) {
+      value = value - 10;
+      numAces--;
+    }
+  }
   return value;
 };
+
+// Function that evaluates dealer score after each hand being dealt
+// const evalScoreDealer = (hand, playerHandValue) => {
+//   let value = evalScore(hand)
+
+//   if (value <= playerHandValue && value >= 18) {
+//     while(value >= 18 ) {
+
+//     }
+//   }
+// };
 
 // Function for updating scores when player won
 const playerWins = () => {
@@ -220,13 +241,12 @@ hitBtn.click(() => {
 standBtn.click(() => {
   standBtn.attr("disabled", true);
   hitBtn.attr("disabled", true);
-
   message.text("Dealer's turn");
-  while (dealer.handValue <= 17) {
+  while (dealer.handValue < 17) {
     dealer.hand.push(shuffle(cardDeck));
     dealerCards.empty();
     dealer.hand.forEach((card) => displayCard("dealer", card[0]));
-    dealer.handValue = evalScore(dealer.hand);
+    dealer.handValue = evalScore(dealer.hand, "dealer");
     dealerHandValue.text(dealer.handValue);
   }
 
