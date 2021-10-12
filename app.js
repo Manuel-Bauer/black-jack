@@ -1,6 +1,8 @@
 // DOM items
 
 let message = $("#message");
+let playerCards = $("#player-cards");
+let dealerCards = $("#dealer-cards");
 let playerHandValue = $("#player-hand-value");
 let dealerHandValue = $("#dealer-hand-value");
 let playerScore = $("#player-score");
@@ -83,12 +85,13 @@ let dealer = {
 const shuffle = (deck) => {
   let max = deck.length - 1;
   let random = Math.floor(Math.random() * max);
+  console.log(deck);
   return deck.splice(random, 1);
 };
 
 // Function that displays card
 
-const display = (player, card) => {
+const displayCard = (player, card) => {
   let html = `<img src=img\\deck\\${card.name}.png alt="${player}-card"/>`;
   $(`#${player}-cards`).append(`${html}`);
 };
@@ -99,21 +102,29 @@ const init = () => {
   // Restore card deck
   player.hand.forEach((card) => cardDeck.push(card));
   dealer.hand.forEach((card) => cardDeck.push(card));
-  // Update Player values
 
   // Set Hand Values to Zero
-  $("p#player-hand-value").text(0);
-  $("p#dealer-hand-value").text(0);
+  playerHandValue.text(0);
+  dealerHandValue.text(0);
+
   // Removes Cards
+  playerCards.empty();
+  dealerCards.empty();
+
+  // Sets new message
+  message.text("New game is about to start...");
 
   // Pauses for 2 seconds
+  setTimeout(() => {
+    message.text("Starting hands are dealt");
+  }, 2000);
 
-  // Sets message "Starting Hands are Dealt"
-  $("#message").text("Starting hands are dealt");
-  // Adds First two player cards
+  // Deal first two cards to player
   player.hand.push(shuffle(cardDeck));
   player.hand.push(shuffle(cardDeck));
-  // Show Cards
+
+  // Display cards
+  player.hand.forEach((card) => displayCard("player", card[0]));
 
   // Evaluate player score
 
@@ -130,3 +141,8 @@ $("#new-game").click(() => {
   console.log("new game");
   init();
 });
+
+displayCard("player", cardDeck[0]);
+displayCard("player", cardDeck[1]);
+displayCard("dealer", cardDeck[2]);
+displayCard("dealer", cardDeck[3]);
