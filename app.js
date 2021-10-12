@@ -257,3 +257,6 @@ standBtn.click(() => {
     return;
   }
 });
+
+standBtn.attr("disabled", true);
+hitBtn.attr("disabled", true);
