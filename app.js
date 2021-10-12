@@ -211,6 +211,8 @@ hitBtn.click(() => {
   playerHandValue.text(player.handValue);
   if (evalScore(player.hand) > 21) {
     dealerWins();
+    hitBtn.attr("disabled", true);
+    standBtn.attr("disabled", true);
   }
 });
 
