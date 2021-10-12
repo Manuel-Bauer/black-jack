@@ -98,10 +98,26 @@ const displayCard = (player, card) => {
 
 // Function that evaluates score after each hand being dealt
 const evalScore = (hand) => {
-  return hand.reduce((acc, val) => {
-    acc += val[0].value;
+  let value = hand.reduce((acc, val) => {
+    if (val[0].type === "ace" && acc > 21) acc++;
+    else acc += val[0].value;
     return acc;
   }, 0);
+
+  // const numAces = hand.reduce((acc, val) => {
+  //   if (val[0].type === "ace") {
+  //     acc++;
+  //   }
+  //   return acc;
+  // }, 0);
+
+  // if (value > 21 && numAces > 0) {
+  //   for (let i = 0; i < numAces; i++) {
+  //     while (value > 21) value -= 10;
+  //   }
+  // }
+
+  return value;
 };
 
 // Init function
@@ -127,30 +143,38 @@ const init = () => {
     message.text("Starting hands are dealt");
   }, 2000);
 
-  // Deal first two cards to player
+  // Deal first two cards to player and one card to dealer
+
   player.hand.push(shuffle(cardDeck));
   player.hand.push(shuffle(cardDeck));
-  console.log(player.hand);
+  dealer.hand.push(shuffle(cardDeck));
 
-  // Display cards
-  player.hand.forEach((card) => displayCard("player", card[0]));
+  // Display cards for player, evaluate and display hand value
+  setTimeout(() => {
+    player.hand.forEach((card) => displayCard("player", card[0]));
+    playerHandValue.text(evalScore(player.hand));
+  }, 3000);
 
-  // Evaluate and display hand value for player
-  playerHandValue.text(evalScore(player.hand));
+  // Display cards for dealer - // One Card hidden still to be implemented
+  setTimeout(() => {
+    dealer.hand.forEach((card) => displayCard("dealer", card[0]));
+    dealerHandValue.text(evalScore(dealer.hand));
+  }, 4000);
 
-  // Adds First two dealer cards - one hidden, one open
-
-  // Evaluates Player score
+  // Evaluate and display hand value for player and dealer without hidden card
 };
 
 // Function that evaluates Score
 
 // Event Handler
 
-$("#new-game").click(() => {
-  console.log("new game");
+// Start a new game
+
+newGameBtn.click(() => {
   init();
 });
+
+//
 
 displayCard("player", cardDeck[0]);
 displayCard("player", cardDeck[1]);
