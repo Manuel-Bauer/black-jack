@@ -13,27 +13,54 @@ header {
 }
 
 img {
-  max-height: 70px;
+  max-height: 80px;
   max-width: 70px;
 }
 
 #gameplay {
   display: flex;
+  border: 1px solid #666666;
+  padding: 10px;
+  flex-direction: row;
+  justify-content: center;
+  height: 200px;
 }
 
 #user {
   flex: 3;
   text-align: center;
+  border: 1px solid #666666;
+}
+
+#table {
+  flex: 1;
+  border: 1px solid #666666;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 #dealer {
   flex: 3;
   text-align: center;
+  border: 1px solid #666666;
 }
 
-#table {
-  flex: 1;
+#scores {
+  display: flex;
   text-align: center;
+}
+
+#player-value {
+  flex: 3;
+}
+
+#total-scores {
+  flex: 1;
+}
+
+#dealer-value {
+  flex: 3;
 }
 
 #message {
@@ -42,12 +69,4 @@ img {
 
 #buttons {
   text-align: center;
-}
-
-#player-cards {
-  min-height: 70px;
-}
-
-#dealer-cards {
-  min-height: 70px;
 }
