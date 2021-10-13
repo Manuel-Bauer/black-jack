@@ -55,7 +55,7 @@ img {
   height: 200px;
 }
 
-#player-value {
+#user-value {
   flex: 3;
   text-align: center;
   border: 1px solid #666666;

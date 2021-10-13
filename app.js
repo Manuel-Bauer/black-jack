@@ -1,11 +1,11 @@
 // DOM items
 
 let message = $("#message");
-let playerCards = $("#player-cards");
+let userCards = $("#user-cards");
 let dealerCards = $("#dealer-cards");
-let playerHandValue = $("#player-hand-value");
+let userHandValue = $("#user-hand-value");
 let dealerHandValue = $("#dealer-hand-value");
-let playerScore = $("#player-score");
+let userScore = $("#user-score");
 let dealerScore = $("#dealer-score");
 let hitBtn = $("#hit");
 let standBtn = $("#stand");
@@ -68,7 +68,7 @@ let cardDeck = [
   { name: "ace_of_clubs", value: 11, type: "ace" },
 ];
 
-let player = {
+let user = {
   hand: [],
   handValue: 0,
   totalScore: 0,
@@ -107,7 +107,7 @@ const displayCard = (player, card) => {
 };
 
 // Function that evaluates score after each hand being dealt
-const evalScore = (hand, user = "player") => {
+const evalScore = (hand, player) => {
   let value = hand.reduce((acc, val) => {
     acc += val[0].value;
     return acc;
@@ -118,16 +118,16 @@ const evalScore = (hand, user = "player") => {
     return acc;
   }, 0);
 
-  if (user === "player") {
+  if (player === "user") {
     while (value > 21 && numAces > 0) {
       value = value - 10;
       numAces--;
     }
   }
 
-  if (user === "dealer") {
+  if (player === "dealer") {
     while (
-      (value >= 17 && value <= playerHandValue && numAces > 0) ||
+      (value >= 17 && value <= user.handValue && numAces > 0) ||
       (value > 21 && numAces > 0)
     ) {
       value = value - 10;
@@ -137,23 +137,12 @@ const evalScore = (hand, user = "player") => {
   return value;
 };
 
-// Function that evaluates dealer score after each hand being dealt
-// const evalScoreDealer = (hand, playerHandValue) => {
-//   let value = evalScore(hand)
-
-//   if (value <= playerHandValue && value >= 18) {
-//     while(value >= 18 ) {
-
-//     }
-//   }
-// };
-
-// Function for updating scores when player won
-const playerWins = () => {
+// Function for updating scores when user won
+const userWins = () => {
   message.text("You Win");
   message.css("color", "green");
-  player.totalScore++;
-  playerScore.text(player.totalScore);
+  user.totalScore++;
+  userScore.text(user.totalScore);
 };
 
 // Function for updating scores when dealer won
@@ -172,19 +161,19 @@ const newGame = () => {
   hitBtn.attr("disabled", false);
 
   // Restore card deck
-  player.hand.forEach((card) => cardDeck.push(card[0]));
+  user.hand.forEach((card) => cardDeck.push(card[0]));
   dealer.hand.forEach((card) => cardDeck.push(card[0]));
 
-  // Remove cards from Player and Dealer
-  player.hand = [];
+  // Remove cards from User and Dealer
+  user.hand = [];
   dealer.hand = [];
 
   // Set Hand Values to Zero
-  playerHandValue.text(0);
+  userHandValue.text(0);
   dealerHandValue.text(0);
 
   // Removes Cards from UI
-  playerCards.empty();
+  userCards.empty();
   dealerCards.empty();
 
   // Sets new message
@@ -195,17 +184,17 @@ const newGame = () => {
     message.text("Dealing...");
   }, 500);
 
-  // Deal first two cards to player and one card to dealer
+  // Deal first two cards to user and one card to dealer
 
-  player.hand.push(shuffle(cardDeck));
-  player.hand.push(shuffle(cardDeck));
+  user.hand.push(shuffle(cardDeck));
+  user.hand.push(shuffle(cardDeck));
   dealer.hand.push(shuffle(cardDeck));
 
-  // Display cards for player, evaluate and display hand value
+  // Display cards for user, evaluate and display hand value
   setTimeout(() => {
-    player.hand.forEach((card) => displayCard("player", card[0]));
-    player.handValue = evalScore(player.hand);
-    playerHandValue.text(player.handValue);
+    user.hand.forEach((card) => displayCard("user", card[0]));
+    user.handValue = evalScore(user.hand);
+    userHandValue.text(user.handValue);
   }, 1000);
 
   // Display cards for dealer - // One Card hidden still to be implemented
@@ -220,7 +209,6 @@ const newGame = () => {
   setTimeout(() => {
     message.text("It's your turn: Hit or Stand?");
   }, 1600);
-  // Evaluate and display hand value for player and dealer without hidden card
 };
 
 // Event Handler
@@ -233,12 +221,12 @@ newGameBtn.click(() => {
 
 // Hit
 hitBtn.click(() => {
-  player.hand.push(shuffle(cardDeck));
-  playerCards.empty();
-  player.hand.forEach((card) => displayCard("player", card[0]));
-  player.handValue = evalScore(player.hand);
-  playerHandValue.text(player.handValue);
-  if (evalScore(player.hand) > 21) {
+  user.hand.push(shuffle(cardDeck));
+  userCards.empty();
+  user.hand.forEach((card) => displayCard("user", card[0]));
+  user.handValue = evalScore(user.hand);
+  userHandValue.text(user.handValue);
+  if (evalScore(user.hand) > 21) {
     dealerWins();
     hitBtn.attr("disabled", true);
     standBtn.attr("disabled", true);
@@ -260,27 +248,27 @@ standBtn.click(() => {
 
   // Dealer overshoots
   if (dealer.handValue > 21) {
-    playerWins();
+    userWins();
     return;
   }
 
   // If both have 21 it is a draw, unless one player has a black-jack and the other not
-  if (dealer.handValue === 21 && player.handValue === 21) {
-    if (dealer.hand.length === 2 && player.hand.length > 2) {
+  if (dealer.handValue === 21 && user.handValue === 21) {
+    if (dealer.hand.length === 2 && user.hand.length > 2) {
       dealerWins();
       return;
-    } else if (dealer.hand.length === 2 && player.hand.length === 2) {
+    } else if (dealer.hand.length === 2 && user.hand.length === 2) {
       message.text("Draw");
       return;
     } else {
-      playerWins();
+      userWins();
       return;
     }
-  } else if (dealer.handValue > player.handValue) {
+  } else if (dealer.handValue > user.handValue) {
     dealerWins();
     return;
-  } else if (player.handValue > dealer.handValue) {
-    playerWins();
+  } else if (user.handValue > dealer.handValue) {
+    userWins();
     return;
   } else {
     message.text("Draw - Start New Game");
@@ -289,3 +277,23 @@ standBtn.click(() => {
 });
 
 init();
+
+// The new shuffle function
+
+const shuffleNew = (player) => {
+  // Define random number based on number ofcards that are still in the deck
+  let max = deck.length - 1;
+  let random = Math.floor(Math.random() * max);
+  // Draw card from the deck
+  let card = deck.splice(random, 1);
+  // Add the card to the players/dealers hand
+  if (player==="user") user.hand.push(card);
+  else dealer.hand.push(card);
+
+
+};
+
+// Dealer or User gets a card from the deck
+// Card is displayed
+// Whole hand is evaluated
+// Scores are shown
