@@ -270,23 +270,29 @@ const stand = () => {
 
   // Dealer will draw cards until she reaches 17 or more
 
-  setTimeout(() => {
-    while (dealer.handValue < 17) {
-      shuffle("dealer");
+  // setTimeout(() => {
+  //
+  // }, 500);
+
+  while (dealer.handValue < 17) {
+    shuffle("dealer");
+  }
+
+  let p = new Promise((resolve, reject) => {
+    if (dealer.handValue >= 17) {
+      resolve();
+    } else {
+      reject("Failed");
     }
-  }, 500);
+  });
 
-  // let p = new Promise((resolve, reject) => {
-  //   if (dealer.handValue >= 17) {
-  //     resolve();
-  //   } else {
-  //     reject("Failed");
-  //   }
-  // });
-
-  setTimeout(() => {
+  p.then(() => {
     evalResult();
-  }, 600);
+  }).catch();
+
+  // setTimeout(() => {
+  //   evalResult();
+  // }, 600);
 };
 
 // Event Handler
