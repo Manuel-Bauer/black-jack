@@ -103,23 +103,23 @@ const shuffle = (player) => {
   else dealer.hand.push(card);
   // Display card to UI
   displayCard(card, player);
-  // Evaluate score of total hand
-  let score =
-    player === "user"
-      ? evalScore(user.hand, "user")
-      : evalScore(dealer.hand, "dealer");
-  // Update score in the UI
-  if (player === "user") userHandValue = score;
-  else dealerHandValue = score;
+  // Evaluate score of total hand and assign to user or player, update UI
+  if (player === "user") {
+    user.handValue = evalScore(user.hand, "user");
+    userHandValue.text(user.handValue);
+  } else {
+    dealer.handValue = evalScore(dealer.hand, "dealer");
+    dealerHandValue.text(dealer.handValue);
+  }
+  console.log(user.handValue);
+  console.log(dealer.handValue);
 };
 
 // Function that displays card to UI
 
 const displayCard = (card, player) => {
   let html = `<img src=img\\deck\\${card[0].name}.png alt="${player}-card"/>`;
-  setTimeout(() => {
-    $(`#${player}-cards`).append(`${html}`);
-  }, 1000);
+  $(`#${player}-cards`).append(`${html}`);
 };
 
 // Function that evaluates score for total hand. Uses different logic for player and dealer
@@ -177,10 +177,6 @@ const dealerWins = () => {
 // Function that will be executed if new game starts
 
 const newGame = () => {
-  // Enable Hit and Stand buttons
-  standBtn.attr("disabled", false);
-  hitBtn.attr("disabled", false);
-
   // Restore card deck
   user.hand.forEach((card) => cardDeck.push(card[0]));
   dealer.hand.forEach((card) => cardDeck.push(card[0]));
@@ -198,35 +194,88 @@ const newGame = () => {
   dealerCards.empty();
 
   // Sets new message
-  message.text("New game is about to start...");
-
-  // Pauses for 2 seconds
-  setTimeout(() => {
-    message.text("Dealing...");
-  }, 500);
+  message.text("Dealing...").css("color", "black");
 
   // Deal first two cards to user and one card to dealer
+  setTimeout(() => {
+    shuffle("user");
+  }, 500);
+  setTimeout(() => {
+    shuffle("user");
+  }, 1000);
+  setTimeout(() => {
+    shuffle("dealer");
+  }, 1500);
 
-  shuffle("user");
-  shuffle("user");
-  shuffle("dealer");
+  // After initial hands are dealt it sets a new message and disables hit and miss buttons
+  setTimeout(() => {
+    message.text("It's your turn. Hit or Stand?");
+    standBtn.attr("disabled", false);
+    hitBtn.attr("disabled", false);
+  }, 2200);
 };
 
 // Function that gets executed when user wants another card by pressing the Hit button
-
 const hit = () => {
   // User gets new card, scores and UI gets updated
-  shuffle("user");
-  // If the player overshoots (handscore > 21) the game is over and the dealer has won
-  if (evalScore(user.hand) > 21) {
-    dealerWins();
-    hitBtn.attr("disabled", true);
-    standBtn.attr("disabled", true);
-  }
+  setTimeout(() => {
+    shuffle("user");
+    // If the player overshoots (handscore > 21) the game is over and the dealer has won
+    if (user.handValue > 21) {
+      dealerWins();
+      hitBtn.attr("disabled", true);
+      standBtn.attr("disabled", true);
+    }
+  }, 500);
+};
+
+// Function that gets exectued when user does not want to draw another card by pressing the Stand button
+const stand = () => {
+  // Stand and Hit buttons are disabled
+  standBtn.attr("disabled", true);
+  hitBtn.attr("disabled", true);
+  // Set new message
+  message.text("Dealer's turn");
+
+  // Dealer will draw cards until she reaches 17 or more
+  setTimeout(() => {
+    while (dealer.handValue < 17) {
+      shuffle("dealer");
+    }
+  }, 500);
+
+  setTimeout(() => {
+    if (dealer.handValue > 21) {
+      userWins();
+      return;
+    }
+
+    // If both have 21 it is a draw, unless one player has a black-jack and the other not
+    if (dealer.handValue === 21 && user.handValue === 21) {
+      if (dealer.hand.length === 2 && user.hand.length > 2) {
+        dealerWins();
+        return;
+      } else if (dealer.hand.length === 2 && user.hand.length === 2) {
+        message.text("Draw");
+        return;
+      } else {
+        userWins();
+        return;
+      }
+    } else if (dealer.handValue > user.handValue) {
+      dealerWins();
+      return;
+    } else if (user.handValue > dealer.handValue) {
+      userWins();
+      return;
+    } else {
+      message.text("Draw - Start New Game");
+      return;
+    }
+  }, 600);
 };
 
 // Event Handler
-
 newGameBtn.click(() => {
   newGame();
 });
@@ -235,47 +284,8 @@ hitBtn.click(() => {
   hit();
 });
 
-// Stand
 standBtn.click(() => {
-  standBtn.attr("disabled", true);
-  hitBtn.attr("disabled", true);
-  message.text("Dealer's turn");
-  while (dealer.handValue < 17) {
-    dealer.hand.push(shuffle(cardDeck));
-    dealerCards.empty();
-    dealer.hand.forEach((card) => displayCard(card[0], "dealer"));
-    dealer.handValue = evalScore(dealer.hand, "dealer");
-    dealerHandValue.text(dealer.handValue);
-  }
-
-  // Dealer overshoots
-  if (dealer.handValue > 21) {
-    userWins();
-    return;
-  }
-
-  // If both have 21 it is a draw, unless one player has a black-jack and the other not
-  if (dealer.handValue === 21 && user.handValue === 21) {
-    if (dealer.hand.length === 2 && user.hand.length > 2) {
-      dealerWins();
-      return;
-    } else if (dealer.hand.length === 2 && user.hand.length === 2) {
-      message.text("Draw");
-      return;
-    } else {
-      userWins();
-      return;
-    }
-  } else if (dealer.handValue > user.handValue) {
-    dealerWins();
-    return;
-  } else if (user.handValue > dealer.handValue) {
-    userWins();
-    return;
-  } else {
-    message.text("Draw - Start New Game");
-    return;
-  }
+  stand();
 });
 
 init();
