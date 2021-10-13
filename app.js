@@ -229,6 +229,37 @@ const hit = () => {
   }, 500);
 };
 
+// Function that evaluates end result
+
+const evalResult = () => {
+  if (dealer.handValue > 21) {
+    userWins();
+    return;
+  }
+  // If both have 21 it is a draw, unless one player has a black-jack and the other not
+  if (dealer.handValue === 21 && user.handValue === 21) {
+    if (dealer.hand.length === 2 && user.hand.length > 2) {
+      dealerWins();
+      return;
+    } else if (dealer.hand.length === 2 && user.hand.length === 2) {
+      message.text("Draw");
+      return;
+    } else {
+      userWins();
+      return;
+    }
+  } else if (dealer.handValue > user.handValue) {
+    dealerWins();
+    return;
+  } else if (user.handValue > dealer.handValue) {
+    userWins();
+    return;
+  } else {
+    message.text("Draw - Start New Game");
+    return;
+  }
+};
+
 // Function that gets exectued when user does not want to draw another card by pressing the Stand button
 const stand = () => {
   // Stand and Hit buttons are disabled
@@ -238,40 +269,23 @@ const stand = () => {
   message.text("Dealer's turn");
 
   // Dealer will draw cards until she reaches 17 or more
+
   setTimeout(() => {
     while (dealer.handValue < 17) {
       shuffle("dealer");
     }
   }, 500);
 
-  setTimeout(() => {
-    if (dealer.handValue > 21) {
-      userWins();
-      return;
-    }
+  // let p = new Promise((resolve, reject) => {
+  //   if (dealer.handValue >= 17) {
+  //     resolve();
+  //   } else {
+  //     reject("Failed");
+  //   }
+  // });
 
-    // If both have 21 it is a draw, unless one player has a black-jack and the other not
-    if (dealer.handValue === 21 && user.handValue === 21) {
-      if (dealer.hand.length === 2 && user.hand.length > 2) {
-        dealerWins();
-        return;
-      } else if (dealer.hand.length === 2 && user.hand.length === 2) {
-        message.text("Draw");
-        return;
-      } else {
-        userWins();
-        return;
-      }
-    } else if (dealer.handValue > user.handValue) {
-      dealerWins();
-      return;
-    } else if (user.handValue > dealer.handValue) {
-      userWins();
-      return;
-    } else {
-      message.text("Draw - Start New Game");
-      return;
-    }
+  setTimeout(() => {
+    evalResult();
   }, 600);
 };
 
