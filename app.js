@@ -212,26 +212,27 @@ const newGame = () => {
   shuffle("dealer");
 };
 
-// Event Handler
+// Function that gets executed when user wants another card by pressing the Hit button
 
-// Start a new game
-
-newGameBtn.click(() => {
-  newGame();
-});
-
-// Hit
-hitBtn.click(() => {
-  user.hand.push(shuffle(cardDeck));
-  userCards.empty();
-  user.hand.forEach((card) => displayCard(card[0], "user"));
-  user.handValue = evalScore(user.hand);
-  userHandValue.text(user.handValue);
+const hit = () => {
+  // User gets new card, scores and UI gets updated
+  shuffle("user");
+  // If the player overshoots (handscore > 21) the game is over and the dealer has won
   if (evalScore(user.hand) > 21) {
     dealerWins();
     hitBtn.attr("disabled", true);
     standBtn.attr("disabled", true);
   }
+};
+
+// Event Handler
+
+newGameBtn.click(() => {
+  newGame();
+});
+
+hitBtn.click(() => {
+  hit();
 });
 
 // Stand
