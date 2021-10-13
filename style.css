@@ -17,7 +17,7 @@ img {
   max-width: 70px;
 }
 
-#gameplay {
+.container-game {
   display: flex;
   border: 1px solid #666666;
   padding: 10px;
@@ -46,27 +46,60 @@ img {
   border: 1px solid #666666;
 }
 
-#scores {
+.container-scores {
   display: flex;
-  text-align: center;
+  border: 1px solid #666666;
+  padding: 10px;
+  flex-direction: row;
+  justify-content: center;
+  height: 200px;
 }
 
 #player-value {
   flex: 3;
+  text-align: center;
+  border: 1px solid #666666;
 }
 
 #total-scores {
   flex: 1;
+  text-align: center;
+  border: 1px solid #666666;
 }
 
 #dealer-value {
   flex: 3;
+  text-align: center;
+  border: 1px solid #666666;
 }
 
 #message {
   text-align: center;
 }
 
+#deck {
+  margin-top: 10px;
+}
+
 #buttons {
+  display: flex;
   text-align: center;
+  margin: 10px;
+}
+
+.btn {
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+#new-game {
+  flex: 1;
+}
+
+#hit {
+  flex: 1;
+}
+
+#stand {
+  flex: 1;
 }

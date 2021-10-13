@@ -80,6 +80,15 @@ let dealer = {
   totalScore: 0,
 };
 
+const init = () => {
+  // Set message
+  message.css("color", "black").text("Start new game!");
+
+  // Disable Hit and Stand Button
+  standBtn.attr("disabled", true);
+  hitBtn.attr("disabled", true);
+};
+
 // Function that shuffles random card out of deck and returns it
 
 const shuffle = (deck) => {
@@ -92,7 +101,9 @@ const shuffle = (deck) => {
 
 const displayCard = (player, card) => {
   let html = `<img src=img\\deck\\${card.name}.png alt="${player}-card"/>`;
-  $(`#${player}-cards`).append(`${html}`);
+  setTimeout(() => {
+    $(`#${player}-cards`).append(`${html}`);
+  }, 1000);
 };
 
 // Function that evaluates score after each hand being dealt
@@ -153,12 +164,9 @@ const dealerWins = () => {
   dealerScore.text(dealer.totalScore);
 };
 
-// Init function
+// New Game function
 
-const init = () => {
-  // Set message color back to black
-  message.css("color", "black");
-
+const newGame = () => {
   // Enable Hit and Stand buttons
   standBtn.attr("disabled", false);
   hitBtn.attr("disabled", false);
@@ -220,7 +228,7 @@ const init = () => {
 // Start a new game
 
 newGameBtn.click(() => {
-  init();
+  newGame();
 });
 
 // Hit
@@ -280,5 +288,4 @@ standBtn.click(() => {
   }
 });
 
-standBtn.attr("disabled", true);
-hitBtn.attr("disabled", true);
+init();
