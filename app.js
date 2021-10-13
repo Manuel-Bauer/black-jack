@@ -89,35 +89,54 @@ const init = () => {
   hitBtn.attr("disabled", true);
 };
 
-// Function that shuffles random card out of deck and returns it
+// Function that shuffles card to either user or dealer, updates scores and UI
 
-const shuffle = (deck) => {
-  let max = deck.length - 1;
+const shuffle = (player) => {
+  // Define random number based on number ofcards that are still in the deck
+  let max = cardDeck.length - 1;
   let random = Math.floor(Math.random() * max);
-  return deck.splice(random, 1);
+  // Draw card from the deck
+  let card = cardDeck.splice(random, 1);
+  console.log(card);
+  // Add the card to the players/dealers hand
+  if (player === "user") user.hand.push(card);
+  else dealer.hand.push(card);
+  // Display card to UI
+  displayCard(card, player);
+  // Evaluate score of total hand
+  let score =
+    player === "user"
+      ? evalScore(user.hand, "user")
+      : evalScore(dealer.hand, "dealer");
+  // Update score in the UI
+  if (player === "user") userHandValue = score;
+  else dealerHandValue = score;
 };
 
-// Function that displays card
+// Function that displays card to UI
 
-const displayCard = (player, card) => {
-  let html = `<img src=img\\deck\\${card.name}.png alt="${player}-card"/>`;
+const displayCard = (card, player) => {
+  let html = `<img src=img\\deck\\${card[0].name}.png alt="${player}-card"/>`;
   setTimeout(() => {
     $(`#${player}-cards`).append(`${html}`);
   }, 1000);
 };
 
-// Function that evaluates score after each hand being dealt
+// Function that evaluates score for total hand. Uses different logic for player and dealer
 const evalScore = (hand, player) => {
+  // Calculates base value of hand with each ace counting 11
   let value = hand.reduce((acc, val) => {
     acc += val[0].value;
     return acc;
   }, 0);
 
+  // Finds the number of aces in the hand
   let numAces = hand.reduce((acc, val) => {
     if (val[0].type === "ace") acc++;
     return acc;
   }, 0);
 
+  // While the user's base value is >21 and she has still aces, 10 gets deducted
   if (player === "user") {
     while (value > 21 && numAces > 0) {
       value = value - 10;
@@ -125,10 +144,12 @@ const evalScore = (hand, player) => {
     }
   }
 
+  // The dealer want's also transform Aces to a 1 when her base value is above 17 and that base value is lower than the hand of the user, so she has the opportunity to draw another card.
+
   if (player === "dealer") {
     while (
-      (value >= 17 && value <= user.handValue && numAces > 0) ||
-      (value > 21 && numAces > 0)
+      (value > 21 && numAces > 0) ||
+      (value >= 17 && value <= user.handValue && numAces > 0)
     ) {
       value = value - 10;
       numAces--;
@@ -153,7 +174,7 @@ const dealerWins = () => {
   dealerScore.text(dealer.totalScore);
 };
 
-// New Game function
+// Function that will be executed if new game starts
 
 const newGame = () => {
   // Enable Hit and Stand buttons
@@ -186,29 +207,9 @@ const newGame = () => {
 
   // Deal first two cards to user and one card to dealer
 
-  user.hand.push(shuffle(cardDeck));
-  user.hand.push(shuffle(cardDeck));
-  dealer.hand.push(shuffle(cardDeck));
-
-  // Display cards for user, evaluate and display hand value
-  setTimeout(() => {
-    user.hand.forEach((card) => displayCard("user", card[0]));
-    user.handValue = evalScore(user.hand);
-    userHandValue.text(user.handValue);
-  }, 1000);
-
-  // Display cards for dealer - // One Card hidden still to be implemented
-  setTimeout(() => {
-    dealer.hand.forEach((card) => displayCard("dealer", card[0]));
-    dealer.handValue = evalScore(dealer.hand);
-    dealerHandValue.text(dealer.handValue);
-  }, 1500);
-
-  // Set new message
-
-  setTimeout(() => {
-    message.text("It's your turn: Hit or Stand?");
-  }, 1600);
+  shuffle("user");
+  shuffle("user");
+  shuffle("dealer");
 };
 
 // Event Handler
@@ -223,7 +224,7 @@ newGameBtn.click(() => {
 hitBtn.click(() => {
   user.hand.push(shuffle(cardDeck));
   userCards.empty();
-  user.hand.forEach((card) => displayCard("user", card[0]));
+  user.hand.forEach((card) => displayCard(card[0], "user"));
   user.handValue = evalScore(user.hand);
   userHandValue.text(user.handValue);
   if (evalScore(user.hand) > 21) {
@@ -241,7 +242,7 @@ standBtn.click(() => {
   while (dealer.handValue < 17) {
     dealer.hand.push(shuffle(cardDeck));
     dealerCards.empty();
-    dealer.hand.forEach((card) => displayCard("dealer", card[0]));
+    dealer.hand.forEach((card) => displayCard(card[0], "dealer"));
     dealer.handValue = evalScore(dealer.hand, "dealer");
     dealerHandValue.text(dealer.handValue);
   }
@@ -277,23 +278,3 @@ standBtn.click(() => {
 });
 
 init();
-
-// The new shuffle function
-
-const shuffleNew = (player) => {
-  // Define random number based on number ofcards that are still in the deck
-  let max = deck.length - 1;
-  let random = Math.floor(Math.random() * max);
-  // Draw card from the deck
-  let card = deck.splice(random, 1);
-  // Add the card to the players/dealers hand
-  if (player==="user") user.hand.push(card);
-  else dealer.hand.push(card);
-
-
-};
-
-// Dealer or User gets a card from the deck
-// Card is displayed
-// Whole hand is evaluated
-// Scores are shown
