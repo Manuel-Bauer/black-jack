@@ -1,95 +1,83 @@
 * {
   box-sizing: border-box;
-}
-
-body {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-
-header {
   text-align: center;
-  background-color: #cccccc;
-  padding: 2px;
+  font-size: 25px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-img {
-  max-height: 80px;
-  max-width: 70px;
+#message {
+  padding: 15px;
+  border: 2px solid black;
+  margin: 20px 100px;
+  border-radius: 10px;
+}
+
+.container-names {
+  display: flex;
+  margin: 10px 100px;
+  align-items: center;
+}
+
+#user-name {
+  flex: 3;
+}
+
+#table-name {
+  flex: 1;
+}
+
+#dealer-name {
+  flex: 3;
+}
+
+#btn-container {
+  display: flex;
+}
+
+button {
+  font-size: 15px;
 }
 
 .container-game {
   display: flex;
-  border: 1px solid #666666;
-  padding: 10px;
+  height: 230px;
+  margin: 10px 100px;
+  border: 5px solid black;
   flex-direction: row;
+  align-items: center;
+  background-color: #35654d;
+  border-radius: 50px;
   justify-content: center;
-  height: 200px;
 }
 
 #user {
   flex: 3;
-  text-align: center;
-  border: 1px solid #666666;
 }
 
 #table {
   flex: 1;
-  border: 1px solid #666666;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 #dealer {
   flex: 3;
-  text-align: center;
-  border: 1px solid #666666;
 }
 
 .container-scores {
   display: flex;
-  border: 1px solid #666666;
-  padding: 10px;
   flex-direction: row;
-  justify-content: center;
-  height: 200px;
+  margin: 10px 100px;
 }
 
 #user-value {
   flex: 3;
-  text-align: center;
-  border: 1px solid #666666;
 }
 
 #total-scores {
   flex: 1;
-  text-align: center;
-  border: 1px solid #666666;
 }
 
 #dealer-value {
   flex: 3;
-  text-align: center;
-  border: 1px solid #666666;
-}
-
-#message {
-  text-align: center;
-}
-
-#deck {
-  margin-top: 10px;
-}
-
-#buttons {
-  display: flex;
-  text-align: center;
-  margin: 10px;
-}
-
-.btn {
-  padding: 5px;
-  margin-bottom: 5px;
 }
 
 #new-game {
@@ -102,4 +90,9 @@ img {
 
 #stand {
   flex: 1;
+}
+
+img {
+  max-height: 90px;
+  max-width: 70px;
 }

@@ -9,32 +9,36 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
   <body>
+
     <header>
-      <h2>Black Jack</h2>
+      <h2 id="message">Start new game</h2>
     </header>
 
-    <h2 id="message">Start new game</h2>
+    <div class="container-names">
+      <p id="user-name">User</p>
+      <p id="btn-container">          
+        <button class="btn" id="new-game">New Game</button> </br>
+        <button class="btn" id="hit">Hit</button>
+        <button class="btn" id="stand">Stand</button></p>
+      <p id="dealer-name">Dealer</p>
+    </div>
 
     <div class="container-game">
-      
       <div class="player" id="user">
-        <h2>User</h2>
         <div id="user-cards">
+          <img id="deck" src="img\faceddown.PNG" alt="deck" />
+          <img id="deck" src="img\faceddown.PNG" alt="deck" />
         </div>
       </div>
       
       <div id="table">
         <img id="deck" src="img\faceddown.PNG" alt="deck" />
-        <div id="buttons">
-          <button class="btn" id="new-game">New Game</button> </br>
-          <button class="btn" id="hit">Hit</button>
-          <button class="btn" id="stand">Stand</button>
-        </div>
       </div>
       
       <div class="player" id="dealer">
-        <h2>Dealer</h2>
-        <div id="dealer-cards"></div>
+        <div id="dealer-cards">
+          <img id="deck" src="img\faceddown.PNG" alt="deck" />
+        </div>
       </div>
     </div>
 

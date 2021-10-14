@@ -1,71 +1,77 @@
 // DOM items
 
-let message = $("#message");
-let userCards = $("#user-cards");
-let dealerCards = $("#dealer-cards");
-let userHandValue = $("#user-hand-value");
-let dealerHandValue = $("#dealer-hand-value");
-let userScore = $("#user-score");
-let dealerScore = $("#dealer-score");
-let hitBtn = $("#hit");
-let standBtn = $("#stand");
-let newGameBtn = $("#new-game");
+const message = $("#message");
+const userCards = $("#user-cards");
+const dealerCards = $("#dealer-cards");
+const userHandValue = $("#user-hand-value");
+const dealerHandValue = $("#dealer-hand-value");
+const userScore = $("#user-score");
+const dealerScore = $("#dealer-score");
+const hitBtn = $("#hit");
+const standBtn = $("#stand");
+const newGameBtn = $("#new-game");
+
+// Messages
+const startMsg = "Welcome to Black Jack - Click New Game";
+const playMsg = "It's your turn - Hit or Miss?";
+const resultUserMsg = "Congratulations - You Won! - Try again!";
+const resultDealerMsg = "Tough Luck - You Lost! - Try again!";
+const resultDrawMsg = "It's a draw - Try again!";
 
 // Data structure
-
 let cardDeck = [
-  { name: "2_of_clubs", value: 2, type: "number" },
-  { name: "2_of_diamonds", value: 2, type: "number" },
-  { name: "2_of_hearts", value: 2, type: "number" },
-  { name: "2_of_spades", value: 2, type: "number" },
-  { name: "3_of_clubs", value: 3, type: "number" },
-  { name: "3_of_diamonds", value: 3, type: "number" },
-  { name: "3_of_hearts", value: 3, type: "number" },
-  { name: "3_of_spades", value: 3, type: "number" },
-  { name: "4_of_clubs", value: 4, type: "number" },
-  { name: "4_of_diamonds", value: 4, type: "number" },
-  { name: "4_of_hearts", value: 4, type: "number" },
-  { name: "4_of_spades", value: 4, type: "number" },
-  { name: "5_of_clubs", value: 5, type: "number" },
-  { name: "5_of_diamonds", value: 5, type: "number" },
-  { name: "5_of_hearts", value: 5, type: "number" },
-  { name: "5_of_spades", value: 5, type: "number" },
-  { name: "6_of_clubs", value: 6, type: "number" },
-  { name: "6_of_diamonds", value: 6, type: "number" },
-  { name: "6_of_hearts", value: 6, type: "number" },
-  { name: "6_of_spades", value: 6, type: "number" },
-  { name: "7_of_clubs", value: 7, type: "number" },
-  { name: "7_of_diamonds", value: 7, type: "number" },
-  { name: "7_of_hearts", value: 7, type: "number" },
-  { name: "7_of_spades", value: 7, type: "number" },
-  { name: "8_of_clubs", value: 8, type: "number" },
-  { name: "8_of_diamonds", value: 8, type: "number" },
-  { name: "8_of_hearts", value: 8, type: "number" },
-  { name: "8_of_spades", value: 8, type: "number" },
-  { name: "9_of_diamonds", value: 9, type: "number" },
-  { name: "9_of_hearts", value: 9, type: "number" },
-  { name: "9_of_spades", value: 9, type: "number" },
-  { name: "9_of_clubs", value: 9, type: "number" },
-  { name: "10_of_diamonds", value: 10, type: "number" },
-  { name: "10_of_hearts", value: 10, type: "number" },
-  { name: "10_of_spades", value: 10, type: "number" },
-  { name: "10_of_clubs", value: 10, type: "number" },
-  { name: "jack_of_diamonds", value: 10, type: "face" },
-  { name: "jack_of_hearts", value: 10, type: "face" },
-  { name: "jack_of_spades", value: 10, type: "face" },
-  { name: "jack_of_clubs", value: 10, type: "face" },
-  { name: "queen_of_diamonds", value: 10, type: "face" },
-  { name: "queen_of_hearts", value: 10, type: "face" },
-  { name: "queen_of_spades", value: 10, type: "face" },
-  { name: "queen_of_clubs", value: 10, type: "face" },
-  { name: "king_of_diamonds", value: 10, type: "face" },
-  { name: "king_of_hearts", value: 10, type: "face" },
-  { name: "king_of_spades", value: 10, type: "face" },
-  { name: "king_of_clubs", value: 10, type: "face" },
-  { name: "ace_of_diamonds", value: 11, type: "ace" },
-  { name: "ace_of_hearts", value: 11, type: "ace" },
-  { name: "ace_of_spades", value: 11, type: "ace" },
-  { name: "ace_of_clubs", value: 11, type: "ace" },
+  { name: "2_of_clubs", value: 2 },
+  { name: "2_of_diamonds", value: 2 },
+  { name: "2_of_hearts", value: 2 },
+  { name: "2_of_spades", value: 2 },
+  { name: "3_of_clubs", value: 3 },
+  { name: "3_of_diamonds", value: 3 },
+  { name: "3_of_hearts", value: 3 },
+  { name: "3_of_spades", value: 3 },
+  { name: "4_of_clubs", value: 4 },
+  { name: "4_of_diamonds", value: 4 },
+  { name: "4_of_hearts", value: 4 },
+  { name: "4_of_spades", value: 4 },
+  { name: "5_of_clubs", value: 5 },
+  { name: "5_of_diamonds", value: 5 },
+  { name: "5_of_hearts", value: 5 },
+  { name: "5_of_spades", value: 5 },
+  { name: "6_of_clubs", value: 6 },
+  { name: "6_of_diamonds", value: 6 },
+  { name: "6_of_hearts", value: 6 },
+  { name: "6_of_spades", value: 6 },
+  { name: "7_of_clubs", value: 7 },
+  { name: "7_of_diamonds", value: 7 },
+  { name: "7_of_hearts", value: 7 },
+  { name: "7_of_spades", value: 7 },
+  { name: "8_of_clubs", value: 8 },
+  { name: "8_of_diamonds", value: 8 },
+  { name: "8_of_hearts", value: 8 },
+  { name: "8_of_spades", value: 8 },
+  { name: "9_of_diamonds", value: 9 },
+  { name: "9_of_hearts", value: 9 },
+  { name: "9_of_spades", value: 9 },
+  { name: "9_of_clubs", value: 9 },
+  { name: "10_of_diamonds", value: 10 },
+  { name: "10_of_hearts", value: 10 },
+  { name: "10_of_spades", value: 10 },
+  { name: "10_of_clubs", value: 10 },
+  { name: "jack_of_diamonds", value: 10 },
+  { name: "jack_of_hearts", value: 10 },
+  { name: "jack_of_spades", value: 10 },
+  { name: "jack_of_clubs", value: 10 },
+  { name: "queen_of_diamonds", value: 10 },
+  { name: "queen_of_hearts", value: 10 },
+  { name: "queen_of_spades", value: 10 },
+  { name: "queen_of_clubs", value: 10 },
+  { name: "king_of_diamonds", value: 10 },
+  { name: "king_of_hearts", value: 10 },
+  { name: "king_of_spades", value: 10 },
+  { name: "king_of_clubs", value: 10 },
+  { name: "ace_of_diamonds", value: 11 },
+  { name: "ace_of_hearts", value: 11 },
+  { name: "ace_of_spades", value: 11 },
+  { name: "ace_of_clubs", value: 11 },
 ];
 
 let user = {
@@ -82,7 +88,7 @@ let dealer = {
 
 const init = () => {
   // Set message
-  message.css("color", "black").text("Start new game!");
+  message.css("color", "black").text(startMsg);
 
   // Disable Hit and Stand Button
   standBtn.attr("disabled", true);
@@ -129,7 +135,7 @@ const evalScore = (hand, player) => {
 
   // Finds the number of aces in the hand
   let numAces = hand.reduce((acc, val) => {
-    if (val[0].type === "ace") acc++;
+    if (val[0].value === 11) acc++;
     return acc;
   }, 0);
 
@@ -157,16 +163,14 @@ const evalScore = (hand, player) => {
 
 // Function for updating scores when user won
 const userWins = () => {
-  message.text("You Win");
-  message.css("color", "green");
+  message.text(resultUserMsg).css("color", "green");
   user.totalScore++;
   userScore.text(user.totalScore);
 };
 
 // Function for updating scores when dealer won
 const dealerWins = () => {
-  message.text("Dealer Wins - Start New Game");
-  message.css("color", "red");
+  message.text(resultDealerMsg).css("color", "red");
   dealer.totalScore++;
   dealerScore.text(dealer.totalScore);
 };
@@ -195,11 +199,12 @@ const newGame = () => {
   shuffle("user");
   shuffle("dealer");
 
-  // Sets a new message and disables hit and miss buttons
+  // Sets a new message, enable hit and miss buttons, disables new game button
 
-  message.text("It's your turn. Hit or Stand?");
+  message.text(playMsg).css("color", "black");
   standBtn.attr("disabled", false);
   hitBtn.attr("disabled", false);
+  newGameBtn.attr("disabled", true);
 };
 
 // Function that gets executed when user wants another card by pressing the Hit button
@@ -211,6 +216,7 @@ const hit = () => {
     dealerWins();
     hitBtn.attr("disabled", true);
     standBtn.attr("disabled", true);
+    newGameBtn.attr("disabled", false);
   }
 };
 
@@ -227,7 +233,7 @@ const evalResult = () => {
       dealerWins();
       return;
     } else if (dealer.hand.length === 2 && user.hand.length === 2) {
-      message.text("Draw");
+      message.text(resultDrawMsg);
       return;
     } else {
       userWins();
@@ -240,18 +246,17 @@ const evalResult = () => {
     userWins();
     return;
   } else {
-    message.text("Draw - Start New Game");
+    message.text(resultDrawMsg);
     return;
   }
 };
 
 // Function that gets exectued when user does not want to draw another card by pressing the Stand button
 const stand = () => {
-  // Stand and Hit buttons are disabled
+  // Stand and Hit buttons are disabled, New Game button enabled
   standBtn.attr("disabled", true);
   hitBtn.attr("disabled", true);
-  // Set new message
-  message.text("Dealer's turn");
+  newGameBtn.attr("disabled", false);
 
   while (dealer.handValue < 17) {
     shuffle("dealer");
