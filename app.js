@@ -1,6 +1,8 @@
 // Bugs
-// Disable all buttons while dealing
-// If Player has 21 and dealer has 21, player wins
+// Disable all buttons while dealing - DONE
+// If Player has 21 and dealer has 21, player wins - DONE
+// Draw message always black -
+// Check if player is allowed to hit if he has already 21 -
 
 // DOM items
 
@@ -263,11 +265,11 @@ const evalResult = () => {
     if (dealer.hand.length === 2 && user.hand.length > 2) {
       dealerWins();
       return;
-    } else if (dealer.hand.length === 2 && user.hand.length === 2) {
-      message.text(resultDrawMsg);
+    } else if (user.hand.length === 2 && dealer.hand.length > 2) {
+      userWins();
       return;
     } else {
-      userWins();
+      message.text(resultDrawMsg).css("color", "black");
       return;
     }
   } else if (dealer.handValue > user.handValue) {
