@@ -190,9 +190,6 @@ const newGame = () => {
   userCards.empty();
   dealerCards.empty();
 
-  // Sets new message
-  message.text("Dealing...").css("color", "black");
-
   // Deal first two cards to user and one card to dealer
   shuffle("user");
   shuffle("user");
