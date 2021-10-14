@@ -13,7 +13,7 @@ const newGameBtn = $("#new-game");
 
 // Messages
 const startMsg = "Welcome to Black Jack - Click New Game";
-const playMsg = "It's your turn - Hit or Miss?";
+const playMsg = "It's your turn - Hit or Stand?";
 const resultUserMsg = "Congratulations - You Won! - Try again!";
 const resultDealerMsg = "Tough Luck - You Lost! - Try again!";
 const resultDrawMsg = "It's a draw - Try again!";
@@ -258,11 +258,31 @@ const stand = () => {
   hitBtn.attr("disabled", true);
   newGameBtn.attr("disabled", false);
 
-  while (dealer.handValue < 17) {
-    shuffle("dealer");
-  }
+  // Function resolves a Promise that get's resolved each second with done if dealer's hand value is >= 17
+  // Inspiration from: https://stackoverflow.com/questions/17217736/while-loop-with-promises#17238793
 
-  evalResult();
+  const promise = () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(dealer.handValue >= 17 ? "done" : "not done");
+      }, 1000);
+    });
+  };
+
+  // If the promise resolves in done, the fuction calls the evalResult() function, which evaluates the end result. If not the shuffle function will get called again (dealer draws another card) and function calls itself again. This goes on until dealer's hand value is >= 17 and Promise resolves with "done"
+
+  const shuffleloop = () => {
+    promise().then((res) => {
+      if (res === "done") {
+        evalResult();
+      } else {
+        shuffle("dealer");
+        return shuffleloop();
+      }
+    });
+  };
+
+  shuffleloop();
 };
 
 // Event Handler
