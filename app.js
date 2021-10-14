@@ -13,9 +13,11 @@ const newGameBtn = $("#new-game");
 
 // Messages
 const startMsg = "Welcome to Black Jack - Click New Game";
+const dealingMsg = "Dealing starting hands...";
 const playMsg = "It's your turn - Hit or Stand?";
-const resultUserMsg = "Congratulations - You Won! - Try again!";
-const resultDealerMsg = "Tough Luck - You Lost! - Try again!";
+const anotherCardMsg = "Dealing...";
+const resultUserMsg = "You Won! - Try again!";
+const resultDealerMsg = "You Lost! - Try again!";
 const resultDrawMsg = "It's a draw - Try again!";
 
 // Data structure
@@ -194,14 +196,25 @@ const newGame = () => {
   userCards.empty();
   dealerCards.empty();
 
+  // Setting message
+  message.text(dealingMsg).css("color", "black");
+
   // Deal first two cards to user and one card to dealer
-  shuffle("user");
-  shuffle("user");
-  shuffle("dealer");
+  setTimeout(() => {
+    shuffle("user");
+  }, 1000);
+
+  setTimeout(() => {
+    shuffle("user");
+  }, 2000);
+
+  setTimeout(() => {
+    shuffle("dealer");
+    message.text(playMsg);
+  }, 3000);
 
   // Sets a new message, enable hit and miss buttons, disables new game button
 
-  message.text(playMsg).css("color", "black");
   standBtn.attr("disabled", false);
   hitBtn.attr("disabled", false);
   newGameBtn.attr("disabled", true);
@@ -209,15 +222,19 @@ const newGame = () => {
 
 // Function that gets executed when user wants another card by pressing the Hit button
 const hit = () => {
+  // Set Message
+  message.text(anotherCardMsg);
   // User gets new card, scores and UI gets updated
-  shuffle("user");
-  // If the player overshoots (handscore > 21) the game is over and the dealer has won
-  if (user.handValue > 21) {
-    dealerWins();
-    hitBtn.attr("disabled", true);
-    standBtn.attr("disabled", true);
-    newGameBtn.attr("disabled", false);
-  }
+  setTimeout(() => {
+    shuffle("user");
+    // If the player overshoots (handscore > 21) the game is over and the dealer has won
+    if (user.handValue > 21) {
+      dealerWins();
+      hitBtn.attr("disabled", true);
+      standBtn.attr("disabled", true);
+      newGameBtn.attr("disabled", false);
+    } else message.text(playMsg);
+  }, 1000);
 };
 
 // Function that evaluates end result
@@ -253,6 +270,9 @@ const evalResult = () => {
 
 // Function that gets exectued when user does not want to draw another card by pressing the Stand button
 const stand = () => {
+  // Set message
+  message.text(anotherCardMsg);
+
   // Stand and Hit buttons are disabled, New Game button enabled
   standBtn.attr("disabled", true);
   hitBtn.attr("disabled", true);
