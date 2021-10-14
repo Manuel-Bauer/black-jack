@@ -97,7 +97,6 @@ const shuffle = (player) => {
   let random = Math.floor(Math.random() * max);
   // Draw card from the deck
   let card = cardDeck.splice(random, 1);
-  console.log(card);
   // Add the card to the players/dealers hand
   if (player === "user") user.hand.push(card);
   else dealer.hand.push(card);
@@ -111,8 +110,6 @@ const shuffle = (player) => {
     dealer.handValue = evalScore(dealer.hand, "dealer");
     dealerHandValue.text(dealer.handValue);
   }
-  console.log(user.handValue);
-  console.log(dealer.handValue);
 };
 
 // Function that displays card to UI
@@ -197,36 +194,27 @@ const newGame = () => {
   message.text("Dealing...").css("color", "black");
 
   // Deal first two cards to user and one card to dealer
-  setTimeout(() => {
-    shuffle("user");
-  }, 500);
-  setTimeout(() => {
-    shuffle("user");
-  }, 1000);
-  setTimeout(() => {
-    shuffle("dealer");
-  }, 1500);
+  shuffle("user");
+  shuffle("user");
+  shuffle("dealer");
 
-  // After initial hands are dealt it sets a new message and disables hit and miss buttons
-  setTimeout(() => {
-    message.text("It's your turn. Hit or Stand?");
-    standBtn.attr("disabled", false);
-    hitBtn.attr("disabled", false);
-  }, 2200);
+  // Sets a new message and disables hit and miss buttons
+
+  message.text("It's your turn. Hit or Stand?");
+  standBtn.attr("disabled", false);
+  hitBtn.attr("disabled", false);
 };
 
 // Function that gets executed when user wants another card by pressing the Hit button
 const hit = () => {
   // User gets new card, scores and UI gets updated
-  setTimeout(() => {
-    shuffle("user");
-    // If the player overshoots (handscore > 21) the game is over and the dealer has won
-    if (user.handValue > 21) {
-      dealerWins();
-      hitBtn.attr("disabled", true);
-      standBtn.attr("disabled", true);
-    }
-  }, 500);
+  shuffle("user");
+  // If the player overshoots (handscore > 21) the game is over and the dealer has won
+  if (user.handValue > 21) {
+    dealerWins();
+    hitBtn.attr("disabled", true);
+    standBtn.attr("disabled", true);
+  }
 };
 
 // Function that evaluates end result
@@ -268,12 +256,6 @@ const stand = () => {
   // Set new message
   message.text("Dealer's turn");
 
-  // Dealer will draw cards until she reaches 17 or more
-
-  // setTimeout(() => {
-  //
-  // }, 500);
-
   while (dealer.handValue < 17) {
     shuffle("dealer");
   }
@@ -282,17 +264,13 @@ const stand = () => {
     if (dealer.handValue >= 17) {
       resolve();
     } else {
-      reject("Failed");
+      reject();
     }
   });
 
   p.then(() => {
     evalResult();
-  }).catch();
-
-  // setTimeout(() => {
-  //   evalResult();
-  // }, 600);
+  });
 };
 
 // Event Handler
