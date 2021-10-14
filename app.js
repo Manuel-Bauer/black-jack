@@ -262,17 +262,7 @@ const stand = () => {
     shuffle("dealer");
   }
 
-  let p = new Promise((resolve, reject) => {
-    if (dealer.handValue >= 17) {
-      resolve();
-    } else {
-      reject();
-    }
-  });
-
-  p.then(() => {
-    evalResult();
-  });
+  evalResult();
 };
 
 // Event Handler
