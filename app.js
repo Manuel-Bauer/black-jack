@@ -1,3 +1,7 @@
+// Bugs
+// Disable all buttons while dealing
+// If Player has 21 and dealer has 21, player wins
+
 // DOM items
 
 const message = $("#message");
@@ -180,6 +184,11 @@ const dealerWins = () => {
 // Function that will be executed if new game starts
 
 const newGame = () => {
+  // Disable Buttons
+  newGameBtn.attr("disabled", true);
+  hitBtn.attr("disabled", true);
+  standBtn.attr("disabled", true);
+
   // Restore card deck
   user.hand.forEach((card) => cardDeck.push(card[0]));
   dealer.hand.forEach((card) => cardDeck.push(card[0]));
@@ -208,32 +217,37 @@ const newGame = () => {
     shuffle("user");
   }, 2000);
 
+  // After dealing got his card, message will change, hit and stand Btn enabled
   setTimeout(() => {
     shuffle("dealer");
     message.text(playMsg);
+    standBtn.attr("disabled", false);
+    hitBtn.attr("disabled", false);
   }, 3000);
-
-  // Sets a new message, enable hit and miss buttons, disables new game button
-
-  standBtn.attr("disabled", false);
-  hitBtn.attr("disabled", false);
-  newGameBtn.attr("disabled", true);
 };
 
 // Function that gets executed when user wants another card by pressing the Hit button
 const hit = () => {
+  // Disable hit and stand button
+  hitBtn.attr("disabled", true);
+  standBtn.attr("disabled", true);
+
   // Set Message
   message.text(anotherCardMsg);
   // User gets new card, scores and UI gets updated
   setTimeout(() => {
     shuffle("user");
-    // If the player overshoots (handscore > 21) the game is over and the dealer has won
+    // If the player overshoots (handscore > 21) the game is over and the dealer has won. If not Hit and Stand button will be enabled again
     if (user.handValue > 21) {
       dealerWins();
       hitBtn.attr("disabled", true);
       standBtn.attr("disabled", true);
       newGameBtn.attr("disabled", false);
-    } else message.text(playMsg);
+    } else {
+      message.text(playMsg);
+      hitBtn.attr("disabled", false);
+      standBtn.attr("disabled", false);
+    }
   }, 1000);
 };
 
@@ -276,7 +290,6 @@ const stand = () => {
   // Stand and Hit buttons are disabled, New Game button enabled
   standBtn.attr("disabled", true);
   hitBtn.attr("disabled", true);
-  newGameBtn.attr("disabled", false);
 
   // Function resolves a Promise that get's resolved each second with done if dealer's hand value is >= 17
   // Inspiration from: https://stackoverflow.com/questions/17217736/while-loop-with-promises#17238793
@@ -295,6 +308,7 @@ const stand = () => {
     promise().then((res) => {
       if (res === "done") {
         evalResult();
+        newGameBtn.attr("disabled", false);
       } else {
         shuffle("dealer");
         return shuffleloop();
