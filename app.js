@@ -1,5 +1,4 @@
 // DOM items
-
 const message = $("#message");
 const userCards = $("#user-cards");
 const dealerCards = $("#dealer-cards");
@@ -88,19 +87,18 @@ let dealer = {
   totalScore: 0,
 };
 
+// Functions 
 const init = () => {
-  // Set message
+  // Set start message
   message.css("color", "black").text(startMsg);
-
   // Disable Hit and Stand Button
   standBtn.attr("disabled", true);
   hitBtn.attr("disabled", true);
 };
 
 // Function that shuffles card to either user or dealer, updates scores and UI
-
 const shuffle = (player) => {
-  // Define random number based on number ofcards that are still in the deck
+  // Define random number based on number of cards that are still in the deck
   let max = cardDeck.length - 1;
   let random = Math.floor(Math.random() * max);
   // Draw card from the deck
@@ -121,26 +119,23 @@ const shuffle = (player) => {
 };
 
 // Function that displays card to UI
-
 const displayCard = (card, player) => {
   let html = `<img src=img\\deck\\${card[0].name}.png alt="${player}-card"/>`;
   $(`#${player}-cards`).append(`${html}`);
 };
 
-// Function that evaluates score for total hand. Uses different logic for player and dealer
+// Function that evaluates score for total hand. Uses different logic for player and dealer. 
 const evalScore = (hand, player) => {
   // Calculates base value of hand with each ace counting 11
   let value = hand.reduce((acc, val) => {
     acc += val[0].value;
     return acc;
   }, 0);
-
   // Finds the number of aces in the hand
   let numAces = hand.reduce((acc, val) => {
     if (val[0].value === 11) acc++;
     return acc;
   }, 0);
-
   // While the user's base value is >21 and she has still aces, 10 gets deducted
   if (player === "user") {
     while (value > 21 && numAces > 0) {
@@ -150,7 +145,6 @@ const evalScore = (hand, player) => {
   }
 
   // The dealer want's also transform Aces to a 1 when her base value is above 17 and that base value is lower than the hand of the user, so she has the opportunity to draw another card.
-
   if (player === "dealer") {
     while (
       (value > 21 && numAces > 0) ||
@@ -163,7 +157,7 @@ const evalScore = (hand, player) => {
   return value;
 };
 
-// Function for updating scores when user won
+// Function for updating scores and UI when user won
 const userWins = () => {
   message.text(resultUserMsg).css("color", "green");
   user.totalScore++;
@@ -178,42 +172,33 @@ const dealerWins = () => {
 };
 
 // Function that will be executed if new game starts
-
 const newGame = () => {
   // Disable Buttons
   newGameBtn.attr("disabled", true);
   hitBtn.attr("disabled", true);
   standBtn.attr("disabled", true);
-
   // Restore card deck
   user.hand.forEach((card) => cardDeck.push(card[0]));
   dealer.hand.forEach((card) => cardDeck.push(card[0]));
-
   // Remove cards from User and Dealer
   user.hand = [];
   dealer.hand = [];
-
   // Set Hand Values to Zero
   userHandValue.text(0);
   dealerHandValue.text(0);
-
   // Removes Cards from UI
   userCards.empty();
   dealerCards.empty();
-
   // Setting message
   message.text(dealingMsg).css("color", "black");
-
   // Deal first two cards to user and one card to dealer
   setTimeout(() => {
     shuffle("user");
   }, 1000);
-
   setTimeout(() => {
     shuffle("user");
   }, 2000);
-
-  // After dealing got his card, message will change, hit and stand Btn enabled
+  // After dealer got his card, message will change, hit and stand Btn enabled
   setTimeout(() => {
     shuffle("dealer");
     message.text(playMsg);
@@ -227,7 +212,6 @@ const hit = () => {
   // Disable hit and stand button
   hitBtn.attr("disabled", true);
   standBtn.attr("disabled", true);
-
   // Set Message
   message.text(anotherCardMsg);
   // User gets new card, scores and UI gets updated
@@ -248,13 +232,12 @@ const hit = () => {
 };
 
 // Function that evaluates end result
-
 const evalResult = () => {
   if (dealer.handValue > 21) {
     userWins();
     return;
   }
-  // If both have 21 it is a draw, unless one player has a black-jack and the other not
+  // If both have 21 it is a draw, unless one player has a black-jack (2 cards and hand value of 21) and the other not
   if (dealer.handValue === 21 && user.handValue === 21) {
     if (dealer.hand.length === 2 && user.hand.length > 2) {
       dealerWins();
@@ -282,14 +265,11 @@ const evalResult = () => {
 const stand = () => {
   // Set message
   message.text(anotherCardMsg);
-
   // Stand and Hit buttons are disabled, New Game button enabled
   standBtn.attr("disabled", true);
   hitBtn.attr("disabled", true);
-
-  // Function resolves a Promise that get's resolved each second with done if dealer's hand value is >= 17
+  // Function creates a Promise that get's resolved each second with done if dealer's hand value is >= 17
   // Inspiration from: https://stackoverflow.com/questions/17217736/while-loop-with-promises#17238793
-
   const promise = () => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -298,8 +278,7 @@ const stand = () => {
     });
   };
 
-  // If the promise resolves to "done", the fuction calls the evalResult() function, which evaluates the end result. If not the shuffle function will get called again (dealer draws another card) and function calls itself again. This goes on until dealer's hand value is >= 17 and Promise resolves with "done"
-
+  // If the promise resolves to "done", the function calls the evalResult() function, which evaluates the end result. If not the shuffle function will get called again (dealer draws another card) and function calls itself again. This goes on until dealer's hand value is >= 17 and Promise resolves with "done"
   const shuffleloop = () => {
     promise().then((res) => {
       if (res === "done") {
@@ -311,7 +290,6 @@ const stand = () => {
       }
     });
   };
-
   shuffleloop();
 };
 
