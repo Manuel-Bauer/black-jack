@@ -87,7 +87,7 @@ let dealer = {
   totalScore: 0,
 };
 
-// Functions 
+// Functions
 const init = () => {
   // Set start message
   message.css("color", "black").text(startMsg);
@@ -119,12 +119,13 @@ const shuffle = (player) => {
 };
 
 // Function that displays card to UI
+// Source of Card IMGs: https://www.google.com/url?q=https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/vector-playing-cards/PNG-cards-1.3.zip&sa=D&source=editors&ust=1634658560982000&usg=AOvVaw0aV6hxhVoUDz0qQlxaZpKu
 const displayCard = (card, player) => {
   let html = `<img src=img\\deck\\${card[0].name}.png alt="${player}-card"/>`;
   $(`#${player}-cards`).append(`${html}`);
 };
 
-// Function that evaluates score for total hand. Uses different logic for player and dealer. 
+// Function that evaluates score for total hand. Uses different logic for player and dealer.
 const evalScore = (hand, player) => {
   // Calculates base value of hand with each ace counting 11
   let value = hand.reduce((acc, val) => {
