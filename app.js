@@ -1,9 +1,3 @@
-// Bugs
-// Disable all buttons while dealing - DONE
-// If Player has 21 and dealer has 21, player wins - DONE
-// Draw message always black -
-// Check if player is allowed to hit if he has already 21 -
-
 // DOM items
 
 const message = $("#message");
@@ -304,7 +298,7 @@ const stand = () => {
     });
   };
 
-  // If the promise resolves in done, the fuction calls the evalResult() function, which evaluates the end result. If not the shuffle function will get called again (dealer draws another card) and function calls itself again. This goes on until dealer's hand value is >= 17 and Promise resolves with "done"
+  // If the promise resolves to "done", the fuction calls the evalResult() function, which evaluates the end result. If not the shuffle function will get called again (dealer draws another card) and function calls itself again. This goes on until dealer's hand value is >= 17 and Promise resolves with "done"
 
   const shuffleloop = () => {
     promise().then((res) => {
