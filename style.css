@@ -99,3 +99,14 @@ button {
 img {
   max-height: 90px;
 }
+
+#deck-container {
+  display: grid;
+  justify-content: center;
+}
+
+#deck,
+#deck-animated {
+  grid-row: 1;
+  grid-column: 1;
+}
