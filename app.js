@@ -9,6 +9,9 @@ const dealerScore = $('#dealer-score');
 const hitBtn = $('#hit');
 const standBtn = $('#stand');
 const newGameBtn = $('#new-game');
+const deckAnimated = $('#deck-animated');
+const test = $('#test');
+const testBtn = $('#testBtn');
 
 // Messages
 const startMsg = 'Welcome to Black Jack - Click New Game';
@@ -118,6 +121,35 @@ const shuffle = (player) => {
   }
 };
 
+// Funtion that animates Shuffling
+const animateShuffle = (player) => {
+  const x = player === 'user' ? 280 : -280;
+
+  deckAnimated.animate(
+    {
+      right: x,
+      opacity: 0,
+    },
+    200
+  );
+  deckAnimated.animate({
+    show: 'toggle',
+  });
+  deckAnimated.animate(
+    {
+      right: 0,
+    },
+    0
+  );
+  deckAnimated.animate(
+    {
+      show: 'toggle',
+      opacity: 1,
+    },
+    0
+  );
+};
+
 // Function that displays card to UI
 // Source of Card IMGs: https://www.google.com/url?q=https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/vector-playing-cards/PNG-cards-1.3.zip&sa=D&source=editors&ust=1634658560982000&usg=AOvVaw0aV6hxhVoUDz0qQlxaZpKu
 const displayCard = (card, player) => {
@@ -195,13 +227,16 @@ const newGame = () => {
   // Deal first two cards to user and one card to dealer
   setTimeout(() => {
     shuffle('user');
+    animateShuffle('user');
   }, 1000);
   setTimeout(() => {
     shuffle('user');
+    animateShuffle('user');
   }, 2000);
   // After dealer got his card, message will change, hit and stand Btn enabled
   setTimeout(() => {
     shuffle('dealer');
+    animateShuffle('dealer');
     message.text(playMsg);
     standBtn.attr('disabled', false);
     hitBtn.attr('disabled', false);
@@ -218,6 +253,7 @@ const hit = () => {
   // User gets new card, scores and UI gets updated
   setTimeout(() => {
     shuffle('user');
+    animateShuffle('user');
     // If the player overshoots (handscore > 21) the game is over and the dealer has won. If not Hit and Stand button will be enabled again
     if (user.handValue > 21) {
       dealerWins();
@@ -287,6 +323,7 @@ const stand = () => {
         newGameBtn.attr('disabled', false);
       } else {
         shuffle('dealer');
+        animateShuffle('dealer');
         return shuffleloop();
       }
     });
