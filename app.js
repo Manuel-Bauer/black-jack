@@ -10,8 +10,6 @@ const hitBtn = $('#hit');
 const standBtn = $('#stand');
 const newGameBtn = $('#new-game');
 const deckAnimated = $('#deck-animated');
-const test = $('#test');
-const testBtn = $('#testBtn');
 
 // Messages
 const startMsg = 'Welcome to Black Jack - Click New Game';
@@ -23,7 +21,7 @@ const resultDealerMsg = 'You Lost! - Try again!';
 const resultDrawMsg = "It's a draw - Try again!";
 
 // Data structure
-let cardDeck = [
+const cardDeck = [
   { name: '2_of_clubs', value: 2 },
   { name: '2_of_diamonds', value: 2 },
   { name: '2_of_hearts', value: 2 },
@@ -78,13 +76,13 @@ let cardDeck = [
   { name: 'ace_of_clubs', value: 11 },
 ];
 
-let user = {
+const user = {
   hand: [],
   handValue: 0,
   totalScore: 0,
 };
 
-let dealer = {
+const dealer = {
   hand: [],
   handValue: 0,
   totalScore: 0,
@@ -99,13 +97,20 @@ const init = () => {
   hitBtn.attr('disabled', true);
 };
 
+// Function that displays card to UI
+// Source of Card IMGs: https://www.google.com/url?q=https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/vector-playing-cards/PNG-cards-1.3.zip&sa=D&source=editors&ust=1634658560982000&usg=AOvVaw0aV6hxhVoUDz0qQlxaZpKu
+const displayCard = (card, player) => {
+  const html = `<img src=img\\deck\\${card[0].name}.png alt="${player}-card"/>`;
+  $(`#${player}-cards`).append(`${html}`);
+};
+
 // Function that shuffles card to either user or dealer, updates scores and UI
 const shuffle = (player) => {
   // Define random number based on number of cards that are still in the deck
-  let max = cardDeck.length - 1;
-  let random = Math.floor(Math.random() * max);
+  const max = cardDeck.length - 1;
+  const random = Math.floor(Math.random() * max);
   // Draw card from the deck
-  let card = cardDeck.splice(random, 1);
+  const card = cardDeck.splice(random, 1);
   // Add the card to the players/dealers hand
   if (player === 'user') user.hand.push(card);
   else dealer.hand.push(card);
@@ -150,13 +155,6 @@ const animateShuffle = (player) => {
   );
 };
 
-// Function that displays card to UI
-// Source of Card IMGs: https://www.google.com/url?q=https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/vector-playing-cards/PNG-cards-1.3.zip&sa=D&source=editors&ust=1634658560982000&usg=AOvVaw0aV6hxhVoUDz0qQlxaZpKu
-const displayCard = (card, player) => {
-  let html = `<img src=img\\deck\\${card[0].name}.png alt="${player}-card"/>`;
-  $(`#${player}-cards`).append(`${html}`);
-};
-
 // Function that evaluates score for total hand. Uses different logic for player and dealer.
 const evalScore = (hand, player) => {
   // Calculates base value of hand with each ace counting 11
@@ -172,7 +170,7 @@ const evalScore = (hand, player) => {
   // While the user's base value is >21 and she has still aces, 10 gets deducted
   if (player === 'user') {
     while (value > 21 && numAces > 0) {
-      value = value - 10;
+      value -= 10;
       numAces--;
     }
   }
@@ -183,7 +181,7 @@ const evalScore = (hand, player) => {
       (value > 21 && numAces > 0) ||
       (value >= 17 && value <= user.handValue && numAces > 0)
     ) {
-      value = value - 10;
+      value -= 10;
       numAces--;
     }
   }
@@ -278,23 +276,17 @@ const evalResult = () => {
   if (dealer.handValue === 21 && user.handValue === 21) {
     if (dealer.hand.length === 2 && user.hand.length > 2) {
       dealerWins();
-      return;
     } else if (user.hand.length === 2 && dealer.hand.length > 2) {
       userWins();
-      return;
     } else {
       message.text(resultDrawMsg).css('color', 'black');
-      return;
     }
   } else if (dealer.handValue > user.handValue) {
     dealerWins();
-    return;
   } else if (user.handValue > dealer.handValue) {
     userWins();
-    return;
   } else {
     message.text(resultDrawMsg);
-    return;
   }
 };
 
@@ -307,13 +299,12 @@ const stand = () => {
   hitBtn.attr('disabled', true);
   // Function creates a Promise that get's resolved each second with done if dealer's hand value is >= 17
   // Inspiration from: https://stackoverflow.com/questions/17217736/while-loop-with-promises#17238793
-  const promise = () => {
-    return new Promise((resolve) => {
+  const promise = () =>
+    new Promise((resolve) => {
       setTimeout(() => {
         resolve(dealer.handValue >= 17 ? 'done' : 'not done');
       }, 1000);
     });
-  };
 
   // If the promise resolves to "done", the function calls the evalResult() function, which evaluates the end result. If not the shuffle function will get called again (dealer draws another card) and function calls itself again. This goes on until dealer's hand value is >= 17 and Promise resolves with "done"
   const shuffleloop = () => {
