@@ -113,14 +113,14 @@ const evalScore = (hand, player) => {
   }, 0);
   // Finds the number of aces in the hand
   let numAces = hand.reduce((acc, val) => {
-    if (val[0].value === 11) acc++;
+    if (val[0].value === 11) acc += 1;
     return acc;
   }, 0);
   // While the user's base value is >21 and she has still aces, 10 gets deducted
   if (player === 'user') {
     while (value > 21 && numAces > 0) {
       value -= 10;
-      numAces--;
+      numAces -= 1;
     }
   }
 
@@ -131,7 +131,7 @@ const evalScore = (hand, player) => {
       (value >= 17 && value <= user.handValue && numAces > 0)
     ) {
       value -= 10;
-      numAces--;
+      numAces -= 1;
     }
   }
   return value;
@@ -191,14 +191,14 @@ const animateShuffle = (player) => {
 // Function for updating scores and UI when user won
 const userWins = () => {
   message.text(resultUserMsg).css('color', 'green');
-  user.totalScore++;
+  user.totalScore += 1;
   userScore.text(user.totalScore);
 };
 
 // Function for updating scores when dealer won
 const dealerWins = () => {
   message.text(resultDealerMsg).css('color', 'red');
-  dealer.totalScore++;
+  dealer.totalScore += 1;
   dealerScore.text(dealer.totalScore);
 };
 
@@ -312,11 +312,11 @@ const stand = () => {
       if (res === 'done') {
         evalResult();
         newGameBtn.attr('disabled', false);
-      } else {
-        shuffle('dealer');
-        animateShuffle('dealer');
-        return shuffleloop();
+        return;
       }
+      shuffle('dealer');
+      animateShuffle('dealer');
+      shuffleloop();
     });
   };
   shuffleloop();
