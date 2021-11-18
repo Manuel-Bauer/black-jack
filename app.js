@@ -104,57 +104,6 @@ const displayCard = (card, player) => {
   $(`#${player}-cards`).append(`${html}`);
 };
 
-// Function that shuffles card to either user or dealer, updates scores and UI
-const shuffle = (player) => {
-  // Define random number based on number of cards that are still in the deck
-  const max = cardDeck.length - 1;
-  const random = Math.floor(Math.random() * max);
-  // Draw card from the deck
-  const card = cardDeck.splice(random, 1);
-  // Add the card to the players/dealers hand
-  if (player === 'user') user.hand.push(card);
-  else dealer.hand.push(card);
-  // Display card to UI
-  displayCard(card, player);
-  // Evaluate score of total hand and assign to user or player, update UI
-  if (player === 'user') {
-    user.handValue = evalScore(user.hand, 'user');
-    userHandValue.text(user.handValue);
-  } else {
-    dealer.handValue = evalScore(dealer.hand, 'dealer');
-    dealerHandValue.text(dealer.handValue);
-  }
-};
-
-// Funtion that animates Shuffling
-const animateShuffle = (player) => {
-  const x = player === 'user' ? 280 : -280;
-
-  deckAnimated.animate(
-    {
-      right: x,
-      opacity: 0,
-    },
-    200
-  );
-  deckAnimated.animate({
-    show: 'toggle',
-  });
-  deckAnimated.animate(
-    {
-      right: 0,
-    },
-    0
-  );
-  deckAnimated.animate(
-    {
-      show: 'toggle',
-      opacity: 1,
-    },
-    0
-  );
-};
-
 // Function that evaluates score for total hand. Uses different logic for player and dealer.
 const evalScore = (hand, player) => {
   // Calculates base value of hand with each ace counting 11
@@ -174,6 +123,57 @@ const evalScore = (hand, player) => {
       numAces--;
     }
   }
+
+  // Function that shuffles card to either user or dealer, updates scores and UI
+  const shuffle = (player) => {
+    // Define random number based on number of cards that are still in the deck
+    const max = cardDeck.length - 1;
+    const random = Math.floor(Math.random() * max);
+    // Draw card from the deck
+    const card = cardDeck.splice(random, 1);
+    // Add the card to the players/dealers hand
+    if (player === 'user') user.hand.push(card);
+    else dealer.hand.push(card);
+    // Display card to UI
+    displayCard(card, player);
+    // Evaluate score of total hand and assign to user or player, update UI
+    if (player === 'user') {
+      user.handValue = evalScore(user.hand, 'user');
+      userHandValue.text(user.handValue);
+    } else {
+      dealer.handValue = evalScore(dealer.hand, 'dealer');
+      dealerHandValue.text(dealer.handValue);
+    }
+  };
+
+  // Funtion that animates Shuffling
+  const animateShuffle = (player) => {
+    const x = player === 'user' ? 280 : -280;
+
+    deckAnimated.animate(
+      {
+        right: x,
+        opacity: 0,
+      },
+      200
+    );
+    deckAnimated.animate({
+      show: 'toggle',
+    });
+    deckAnimated.animate(
+      {
+        right: 0,
+      },
+      0
+    );
+    deckAnimated.animate(
+      {
+        show: 'toggle',
+        opacity: 1,
+      },
+      0
+    );
+  };
 
   // The dealer want's also transform Aces to a 1 when her base value is above 17 and that base value is lower than the hand of the user, so she has the opportunity to draw another card.
   if (player === 'dealer') {
