@@ -10,6 +10,7 @@
   },
   "scripts": {
     "lint": "eslint app.js",
-    "lint:fix": "eslint --fix .&& echo 'Complete ESlint fix'"
+    "lint:fix": "eslint --fix .&& echo 'Complete ESlint fix'",
+    "start": "serve"
   }
 }
